@@ -1,6 +1,5 @@
 import java.util.Scanner;
 import java.io.File;
-import java.util.Arrays;
 import java.util.ArrayList;
 import java.io.FileNotFoundException;
 
@@ -20,7 +19,7 @@ public class SortManager
     private static ArrayList<Integer> nums = new ArrayList<>();
     private static ArrayList<Integer> clonedNums = new ArrayList<>();
     
-    public static void main (String[] args){
+    public static void oldTester (){
         String fileName = "250k_source.txt";
         Timer timer = new Timer();
         size = 0;
@@ -44,79 +43,183 @@ public class SortManager
         System.out.println("It took " + timer + " and " + ops + " operations.");
 
     }
-    
-    public static void UI(){
-        Scanner scanner = new Scanner (System.in);
+    /**
+     *  Main loop to test out different sorting algorithms
+     *  
+     *  @param args             Filled in by java 
+     */
+    public static void main(String[] args){
+        Scanner sc = new Scanner(System.in);
         Timer timer = new Timer();
         boolean exit = false;
         String fileName;
-        
+
         int[] results;
         ArrayList<Integer> sorted = new ArrayList<>();
+        
+        int choice = 0;
+        int sortChoice = 0;
+        int outputChoice = 0;
+        int a = 1;
+        
+        // Loop keeps running as long as user does not select exit
         while(!exit){
-            int choice = 0;
             System.out.println("1. Select a file");
             System.out.println("2. Select a sort method");
-            System.out.println("3. Check sort time");
-            System.out.println("4. Check number of operations required for sort");
-            System.out.println("5. Check both");
-            System.out.println("6. Exit");
-            try{
-                choice = Integer.parseInt(scanner.nextLine());
-            } catch(NumberFormatException e){
-                System.out.println("Please enter an integer");
-            }
+            System.out.println("3. Exit");
+            System.out.println("");
+
+            choice = sc.nextInt();
+            sc.nextLine();
+            
+            //Ask user what they want to do
             switch(choice){
                 case 0:
-                   System.out.println("Invalid choice");
+                    System.out.println("Invalid choice");
                     break;
-                
                 case 1:
-                    System.out.println("Enter the file Name");
-                    loadData(scanner.nextLine());
+                    System.out.println("Enter the file name:");
+                    loadData(sc.nextLine());
+                    System.out.println("");
                     break;
+                    
+                // If sort, ask the user which sort they want to use
                 case 2:
                     System.out.println("1. Recursion sort");
                     System.out.println("2. Bubble sort");
                     System.out.println("3. Quick sort");
-                    int sortChoice = scanner.nextInt();
-                    scanner.nextLine();
+                    System.out.println("");
+
+                    sortChoice = sc.nextInt();
+                    sc.nextLine();
+
                     switch(sortChoice){
                         case 0:
                             System.out.println("Invalid choice");
                             break;
+                            
+                        
                         case 1:
-                            Method recursion =  SortManager.class.getDeclaredMethod("quickSort", Integer[] array, Integer num, Integer length);
-                            break;
+                             System.out.println("1. Check sort time");
+                             System.out.println("2. Check number of operations required for sort");
+                             System.out.println("3. Check both");
+                             System.out.println("");
+                            
+                             // Ask the user if they want to count sort time, number of operations or both for recursion sort
+                             outputChoice = sc.nextInt();
+                             sc.nextLine();
+
+                             switch(outputChoice){
+                                case 0:
+                                    System.out.println("Invalid choice");
+                                    break;
+                                case 1:
+                                    timer.startTimer();
+                                    results = recursionSort(numbers.clone());
+                                    timer.endTimer();
+                                    System.out.println("It took " + timer);
+                                    System.out.println("");
+                                    break;
+                                case 2:
+                                    results = recursionSortOpCount(numbers.clone());
+                                    System.out.println("It took " + ops+" operations");
+                                    System.out.println("");
+                                    break;
+                                case 3:
+                                    timer.startTimer();
+                                    results = recursionSortOpCount(numbers.clone());
+                                    timer.endTimer();
+                                    System.out.println("It took " + timer + " and " + ops + " operations.");
+                                    System.out.println("");
+                                    break;
+                             }
+                             break;
+                        case 2:
+                             System.out.println("1. Check sort time");
+                             System.out.println("2. Check number of operations required for sort");
+                             System.out.println("3. Check both");
+                             System.out.println("");
+                             
+                             // Ask the user if they want to count sort time, number of operations or both for bubble sort
+                             outputChoice = sc.nextInt();
+                             sc.nextLine();
+                             
+                             switch(outputChoice){
+                                case 0:
+                                    System.out.println("Invalid choice");
+                                    break;
+                                case 1:
+                                    timer.startTimer();
+                                    results = bubbleSort(numbers.clone());
+                                    timer.endTimer();
+                                    System.out.println("It took " + timer);
+                                    System.out.println("");
+                                    break;
+                                case 2:
+                                    results = bubbleSortOpCount(numbers.clone());
+                                    System.out.println("It took " + ops+" operations");
+                                    System.out.println("");
+                                    break;
+                                case 3:
+                                    timer.startTimer();
+                                    results = bubbleSortOpCount(numbers.clone());
+                                    timer.endTimer();
+                                    System.out.println("It took " + timer + " and " + ops + " operations.");
+                                    System.out.println("");
+                                    break;
+                             }
+                             break;
+                        case 3:
+                             System.out.println("1. Check sort time");
+                             System.out.println("2. Check number of operations required for sort");
+                             System.out.println("3. Check both");
+                             System.out.println("");
+                             
+                             // Ask the user if they want to count sort time, number of operations or both for quick sort
+                             outputChoice = sc.nextInt();
+                             sc.nextLine();
+                             switch(outputChoice){
+                                case 0:
+                                    System.out.println("Invalid choice");
+                                    break;
+                                case 1:
+                                    timer.startTimer();
+                                    results = quickSort(numbers.clone(),0,numbers.length-1);
+                                    timer.endTimer();
+                                    System.out.println("It took " + timer);
+                                    System.out.println("");
+                                    break;
+                                case 2:
+                                    results = quickSortOpCount(numbers.clone(),0,numbers.length-1);
+                                    System.out.println("It took " + ops+" operations");
+                                    System.out.println("");
+                                    break;
+                                case 3:
+                                    timer.startTimer();
+                                    results = quickSortOpCount(numbers.clone(),0,numbers.length-1);
+                                    timer.endTimer();
+                                    System.out.println("It took " + timer + " and " + ops + " operations.");
+                                    System.out.println("");
+                                    break;
+                             }
+                             break;
                     }
                     break;
+                
+                //Completes the condition for while loop, allowing the user to exit
                 case 3:
-                    System.out.println("time");
-                    timer.startTimer();
-                    results = quickSort(numbers.clone(),0,numbers.length-1);
-                    timer.endTimer();
-                    System.out.println("It took " + timer);
-                    break;
-                case 4:
-                    System.out.println("operations");
-                    results = quickSortOpCount(numbers.clone(),0,numbers.length-1);
-                    System.out.println("It took " + ops+" operations");
-                    break;
-                case 5:
-                    System.out.println("both");
-                    timer.startTimer();
-                    results = quickSortOpCount(numbers.clone(),0,numbers.length-1);
-                    timer.endTimer();
-                    System.out.println("It took " + timer + " and " + ops + " operations.");
-                    break;
-                case 6:
                     exit = true;
                     break;
             }
-            System.out.println("End of the loop");
         }
+
     }
     
+    /**
+     * Method to load file containing a list of numbers and input them into an array
+     * 
+     * @param fileName          String of the file
+     */
     private static void loadData (String fileName){
         ArrayList<String> lines = new ArrayList<String>();
         System.out.println("Attempting to read integers from: " + fileName);
@@ -199,9 +302,15 @@ public class SortManager
     }   
     
     /**
-     * My own sort method (a very slow bubble sort)
+     * My own sort method, runs through a list, each time it detects the element ahead to be smaller than current element
+     * it will switch places and call on itself again.
+     * 
+     * Warning, large data sets (1000+ values) will cause the recursive method to stack overflow
+     * 
+     * @param array                 The unsorted array of numbers
+     * @param int []
      */
-    public static void recursionSort(int [] array){
+    public static int [] recursionSort(int [] array){
         for(int i = 0; i < array.length-1; i++){
             int currNum = array[i];
             int nextNum = array[i+1];
@@ -211,8 +320,17 @@ public class SortManager
                 recursionSort(array);
             }
         }
+        return array;
     }
     
+    /**
+     * My own sort method with an operation counter.
+     * 
+     * Warning, large data sets (1000+ values) will cause the recursive method to stack overflow
+     * 
+     * @param array                 The unsorted array of numbers
+     * @return int []
+     */
     public static int[] recursionSortOpCount(int [] array){
         ops = 0;
         ops++; // set i = 0;
@@ -231,6 +349,15 @@ public class SortManager
         return array;
     }
     
+    /**
+     * Quick sort algorithm
+     * 
+     * @param arr           Unsorted array of numbers
+     * @param begin         Front element
+     * @param end           Last element
+     * @return int[]
+     * 
+     */
     public static int[] quickSort(int arr[], int begin, int end) {
         if (begin < end) {
             int partitionIndex = partition(arr, begin, end);
@@ -240,6 +367,13 @@ public class SortManager
         }
         return arr;
     }
+    /**
+     * A helper method for quick sort to break apart the array in order to more efficently swap values
+     * 
+     * @param begin         Front element
+     * @param end           Last element
+     * @return int
+     */
     private static int partition(int arr[], int begin, int end) {
         int pivot = arr[end];
         int i = (begin-1);
@@ -261,6 +395,14 @@ public class SortManager
         return i+1;
     }
     
+    /**
+     * Quick sort with an operation counter
+     * 
+     * @param arr           Unsorted array of numbers
+     * @param begin         Front element
+     * @param end           Last element
+     * @return int[]
+     */
     public static int[] quickSortOpCount(int arr[], int begin, int end) {
         ops++;
         if (begin < end) {
@@ -272,6 +414,14 @@ public class SortManager
         }
         return arr;
     }
+    
+    /**
+     * A helper method for quick sort with an operation counter
+     * 
+     * @param begin         Front element
+     * @param end           Last element
+     * @return int
+     */
     private static int partitionOpCount(int arr[], int begin, int end) {
         int pivot = arr[end];
         int i = (begin-1);
@@ -297,6 +447,13 @@ public class SortManager
         return i+1;
     }
     
+    /**
+     * Method to check that the list is correctly sorted in ascending order
+     * 
+     * @param theArray          The array being tested
+     * @boolean report          Check if results should be printed
+     * @return boolean
+     */
     public static boolean checkResults (int[] theArray, boolean report)
     {
         System.out.println("Checking Validity");
